@@ -8,19 +8,20 @@ import org.jellyfin.apiclient.model.api.*
 /**
  * Note: Does not contain ALL properties from DeviceProfile. Use .build().copy() to add those
  */
-class DeviceProfileBuilder {
-	var name: String = DEFAULT_NAME
-	var maxStreamingBitrate: Long = DEFAULT_BITRATE
-	var maxStaticBitrate: Long = DEFAULT_BITRATE
+public class DeviceProfileBuilder {
+	public var name: String = DEFAULT_NAME
+	public var maxStreamingBitrate: Int? = DEFAULT_BITRATE
+	public var maxStaticBitrate: Int? = DEFAULT_BITRATE
 
-	var directPlayProfiles: MutableSet<DirectPlayProfile> = mutableSetOf()
-	var transcodingProfiles: MutableSet<TranscodingProfile> = mutableSetOf()
-//	var responseProfiles: MutableSet<ResponseProfile> = mutableSetOf()
-	var codecProfiles: MutableSet<CodecProfile> = mutableSetOf()
-	var containerProfiles: MutableSet<ContainerProfile> = mutableSetOf()
-	var subtitleProfiles: MutableSet<SubtitleProfile> = mutableSetOf()
+	public var directPlayProfiles: MutableSet<DirectPlayProfile> = mutableSetOf()
+	public var transcodingProfiles: MutableSet<TranscodingProfile> = mutableSetOf()
 
-	fun build() = DeviceProfile(
+	//public var responseProfiles: MutableSet<ResponseProfile> = mutableSetOf()
+	public var codecProfiles: MutableSet<CodecProfile> = mutableSetOf()
+	public var containerProfiles: MutableSet<ContainerProfile> = mutableSetOf()
+	public var subtitleProfiles: MutableSet<SubtitleProfile> = mutableSetOf()
+
+	public fun build(): DeviceProfile = DeviceProfile(
 		name = name,
 		id = null,
 		identification = null,
@@ -62,11 +63,11 @@ class DeviceProfileBuilder {
 		subtitleProfiles = subtitleProfiles.toList()
 	)
 
-	companion object {
-		const val DEFAULT_NAME = "jellyfin-apiclient-java"
-		const val DEFAULT_BITRATE = 8000000L // 1MB
+	public companion object {
+		public const val DEFAULT_NAME: String = "jellyfin-apiclient-java"
+		public const val DEFAULT_BITRATE: Int = 8000000 // 1MB
 	}
 }
 
-fun createDeviceProfile(init: DeviceProfileBuilder.() -> Unit) =
+public fun createDeviceProfile(init: DeviceProfileBuilder.() -> Unit): DeviceProfile =
 	DeviceProfileBuilder().apply(init).build()

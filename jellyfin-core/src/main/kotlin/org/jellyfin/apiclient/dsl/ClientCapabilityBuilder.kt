@@ -4,56 +4,55 @@ import org.jellyfin.apiclient.model.api.ClientCapabilities
 import org.jellyfin.apiclient.model.api.DeviceProfile
 import org.jellyfin.apiclient.model.api.GeneralCommandType
 
-class ClientCapabilityBuilder {
+public class ClientCapabilityBuilder {
 	// TODO use ENUM
-	val playableMediaTypes: MutableSet<String> = mutableSetOf()
+	public val playableMediaTypes: MutableSet<String> = mutableSetOf()
 
-	// TODO use ENUM
-	val supportedCommands: MutableSet<String> = mutableSetOf()
-	var supportsMediaControl: Boolean = false
-	var supportsPersistentIdentifier: Boolean = false
+	public val supportedCommands: MutableSet<GeneralCommandType> = mutableSetOf()
+	public var supportsMediaControl: Boolean = false
+	public var supportsPersistentIdentifier: Boolean = false
 
 	private var deviceProfile: DeviceProfile? = null
 
 	// supported commands - add
-	operator fun GeneralCommandType.unaryPlus() {
-		supportedCommands.add(name)
+	public operator fun GeneralCommandType.unaryPlus() {
+		supportedCommands.add(this)
 	}
 
-	operator fun Iterable<GeneralCommandType>.unaryPlus() {
-		supportedCommands.addAll(map { it.name })
+	public operator fun Iterable<GeneralCommandType>.unaryPlus() {
+		supportedCommands.addAll(this)
 	}
 
-	operator fun Array<GeneralCommandType>.unaryPlus() {
-		supportedCommands.addAll(map { it.name })
+	public operator fun Array<GeneralCommandType>.unaryPlus() {
+		supportedCommands.addAll(this)
 	}
 
 	// supported commands - remove
-	operator fun GeneralCommandType.unaryMinus() {
-		supportedCommands.remove(name)
+	public operator fun GeneralCommandType.unaryMinus() {
+		supportedCommands.remove(this)
 	}
 
-	operator fun Iterable<GeneralCommandType>.unaryMinus() {
-		supportedCommands.removeAll(map { it.name })
+	public operator fun Iterable<GeneralCommandType>.unaryMinus() {
+		supportedCommands.removeAll(this)
 	}
 
-	operator fun Array<GeneralCommandType>.unaryMinus() {
-		supportedCommands.removeAll(map { it.name })
+	public operator fun Array<GeneralCommandType>.unaryMinus() {
+		supportedCommands.removeAll(this)
 	}
 
 	// device profile
-	fun deviceProfile(init: DeviceProfileBuilder.() -> Unit) {
+	public fun deviceProfile(init: DeviceProfileBuilder.() -> Unit) {
 		deviceProfile = DeviceProfileBuilder().apply(init).build()
 	}
 
-	fun deviceProfile(name: String, init: DeviceProfileBuilder.() -> Unit) {
+	public fun deviceProfile(name: String, init: DeviceProfileBuilder.() -> Unit) {
 		deviceProfile = DeviceProfileBuilder().also { builder ->
 			builder.name = name
 			builder.init()
 		}.build()
 	}
 
-	fun build() = ClientCapabilities(
+	public fun build(): ClientCapabilities = ClientCapabilities(
 		playableMediaTypes = playableMediaTypes.toList(),
 		supportedCommands = supportedCommands.toList(),
 		supportsMediaControl = supportsMediaControl,
@@ -67,6 +66,6 @@ class ClientCapabilityBuilder {
 	)
 }
 
-fun createCapabilities(init: ClientCapabilityBuilder.() -> Unit) =
+public fun createCapabilities(init: ClientCapabilityBuilder.() -> Unit): ClientCapabilities =
 	ClientCapabilityBuilder().apply(init).build()
 
